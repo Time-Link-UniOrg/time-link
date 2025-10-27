@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "teacher")
+@Table(name = "course")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Teacher {
+public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,22 +20,17 @@ public class Teacher {
     @Column(nullable = false)
     private String name;
 
-    private String phone;
-
-    private String email;
+    @Column(columnDefinition = "text")
+    private String teachers;
 
     @Column(columnDefinition = "text")
-    private String students;
+    private String lessons;
 
-    @Column(columnDefinition = "text")
-    private String groups;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
 
-    @Column(columnDefinition = "text")
-    private String coursesId;
+    private Integer age;
 
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
+    @Column(name = "time_period")
+    private Integer timePeriod;
 }
