@@ -4,6 +4,7 @@ import com.timelink.time_link.model.Group;
 import com.timelink.time_link.repository.GroupRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class GroupService {
@@ -12,6 +13,18 @@ public class GroupService {
 
     public GroupService(GroupRepository groupRepository) {
         this.groupRepository = groupRepository;
+    }
+
+    public Group putGroup(Long id, Group newGroup) {
+        Group existingGroup = groupRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Group not found"));
+
+        existingGroup.setName(newGroup.getName());
+        existingGroup.setActive(newGroup.getActive());
+        existingGroup.setStartTime(newGroup.getStartTime());
+        existingGroup.setEndTime(newGroup.getEndTime());
+
+        return groupRepository.save(existingGroup);
     }
 
     public List<Group> getAllGroups() {

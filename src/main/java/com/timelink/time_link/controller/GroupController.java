@@ -2,8 +2,14 @@ package com.timelink.time_link.controller;
 
 import com.timelink.time_link.model.Group;
 import com.timelink.time_link.service.GroupService;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/groups")
@@ -15,29 +21,39 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @GetMapping
-    public List<Group> getAllGroups() {
-        return groupService.getAllGroups();
+    @PostMapping
+    public ResponseEntity<Group> saveGroup(@RequestBody Group group) {
+        return new ResponseEntity<>(groupService.saveGroup(group), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public Group getGroupById(@PathVariable Long id) {
-        return groupService.getGroupById(id);
+    public ResponseEntity<OpGroup> getGroupById(@PathVariable Long id) {
+        Optional<Group> fetchedGroup = groupService.getGroupById(id);
+        return fetchedGroup.map(group -> new ResponseEntity<>(group, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping
-    public Group createGroup(@RequestBody Group group) {
-        return groupService.saveGroup(group);
-    }
-
-    @PutMapping("/{id}")
-    public Group updateGroup(@PathVariable Long id, @RequestBody Group group) {
-        group.setId(id);
-        return groupService.saveGroup(group);
+    @GetMapping
+    public ResponseEntity<List<Group>> getAllGroups() {
+        return new ResponseEntity<>(groupService.getAllGroups(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteGroup(@PathVariable Long id) {
-        groupService.deleteGroup(id);
+    public ResponseEntity<Void> deleteGroup(@PathVariable Long id) {
+        try {
+            groupService.deleteGroup(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EmptyResultDataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Group> putGroup(@PathVariable Long id, @RequestBody Group newGroup) {
+        try {
+            return new ResponseEntity<>(groupService.putGroup(id, newGroup), HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
