@@ -31,16 +31,9 @@ public class Student {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "group_id")
-    private Long groupId;
-
-    @Column(name = "parent_id")
-    private Long parentId;
-
     @Column(name = "history", columnDefinition = "jsonb")
     private String history;
 
-    // ✅ Relation: each student belongs to one group
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;

@@ -27,10 +27,14 @@ public class GroupController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OpGroup> getGroupById(@PathVariable Long id) {
-        Optional<Group> fetchedGroup = groupService.getGroupById(id);
-        return fetchedGroup.map(group -> new ResponseEntity<>(group, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Group> getGroupById(@PathVariable Long id) {
+        Group group = groupService.getGroupById(id);
+        if (group != null) {
+            return new ResponseEntity<>(group, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping

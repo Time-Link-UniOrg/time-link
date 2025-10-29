@@ -42,4 +42,11 @@ public class Group {
 
     @OneToMany(mappedBy = "group")
     private List<Student> students;
+
+    public Group(String name, Boolean active, LocalDateTime startTime, LocalDateTime endTime) {
+        this.name = name;
+        this.active = active;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }
