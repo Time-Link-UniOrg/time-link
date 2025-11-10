@@ -2,6 +2,7 @@ package com.timelink.time_link.controller;
 
 import com.timelink.time_link.model.Group;
 import com.timelink.time_link.service.GroupService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,17 +14,19 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/groups")
+@RequiredArgsConstructor
 public class GroupController {
 
     private final GroupService groupService;
 
-    public GroupController(GroupService groupService) {
-        this.groupService = groupService;
+    @PostMapping
+    public ResponseEntity<Group> createGroup(@RequestBody Group group) {
+        return new ResponseEntity<>(groupService.saveGroup(group), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Group> saveGroup(@RequestBody Group group) {
-        return new ResponseEntity<>(groupService.saveGroup(group), HttpStatus.OK);
+    @GetMapping
+    public List<Group> getAllGroups() {
+        return groupService.getAllGroups();
     }
 
     @GetMapping("/{id}")
@@ -35,11 +38,6 @@ public class GroupController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Group>> getAllGroups() {
-        return new ResponseEntity<>(groupService.getAllGroups(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

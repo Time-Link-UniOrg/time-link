@@ -1,11 +1,17 @@
 package com.timelink.time_link.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "student_table")
 public class Student {
@@ -36,6 +42,7 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
+    @JsonBackReference
     private Group group;
 
     /*

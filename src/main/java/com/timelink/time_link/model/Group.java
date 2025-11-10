@@ -1,13 +1,19 @@
 package com.timelink.time_link.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "group_table")
 public class Group {
@@ -41,7 +47,8 @@ public class Group {
     */
 
     @OneToMany(mappedBy = "group")
-    private List<Student> students;
+    @JsonManagedReference
+    private List<Student> students = new ArrayList<>();
 
     public Group(String name, Boolean active, LocalDateTime startTime, LocalDateTime endTime) {
         this.name = name;
