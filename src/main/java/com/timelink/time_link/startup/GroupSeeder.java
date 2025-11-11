@@ -18,7 +18,12 @@ public class GroupSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception{
-        Group group1 = new Group("Math", true, LocalDateTime.now(), LocalDateTime.now().plusMonths(3));
+        LocalDateTime start = LocalDateTime.of(2025, 1, 1, 9, 0);
+        Group group1 = new Group("Math", true, start , start.plusMonths(3));
+        Group group2 = new Group("Python", true, start, start.plusMonths(1));
         groupRepository.save(group1);
+        groupRepository.save(group2);
+        System.out.println("Seeded group: Math");
+        System.out.println("Seeded group: Python");
     }
 }

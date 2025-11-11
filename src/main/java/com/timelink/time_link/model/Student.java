@@ -37,8 +37,10 @@ public class Student {
     @Column(name = "password")
     private String password;
 
+    /* Should history be a list of courses?
     @Column(name = "history", columnDefinition = "jsonb")
     private String history;
+    */
 
     @ManyToOne
     @JoinColumn(name = "group_id")
