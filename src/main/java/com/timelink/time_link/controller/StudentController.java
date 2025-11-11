@@ -1,5 +1,6 @@
 package com.timelink.time_link.controller;
 
+import com.timelink.time_link.dto.Student.StudentRequestDTO;
 import com.timelink.time_link.model.Group;
 import com.timelink.time_link.model.Student;
 import com.timelink.time_link.repository.GroupRepository;
@@ -32,7 +33,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> saveStudent(@RequestBody Student student) {
+    public ResponseEntity<StudentResponseDTO> saveStudent(@RequestBody Student student) {
         if (student.getGroup() != null && student.getGroup().getId() != null) {
             Group group = groupRepository.findById(student.getGroup().getId())
                     .orElseThrow(() -> new NoSuchElementException("Group not found"));
