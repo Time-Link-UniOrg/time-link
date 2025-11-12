@@ -24,12 +24,12 @@ public class ParentService {
         return parentRepository.save(parent);
     }
 
-    // ново: вземане по ID
+
     public Optional<Parent> getParentById(Integer id) {
         return parentRepository.findById(id);
     }
 
-    // запазваме твоя подпис на репото (връща Parent), тук го увиваме в Optional
+
     public Optional<Parent> getByUsername(String username) {
         return Optional.ofNullable(parentRepository.findByUsername(username));
     }
@@ -56,10 +56,10 @@ public class ParentService {
         }
 
         parentRepository.deleteById(id);
-        parentRepository.flush();  // изпращаме DELETE веднага
+        parentRepository.flush();
 
         if (parentRepository.count() == 0) {
-            parentRepository.restartParentIdIdentity();  // рестартираме ID само ако таблицата е празна
+            parentRepository.restartParentIdIdentity();
         }
     }
 
