@@ -1,51 +1,54 @@
 package com.timelink.time_link.service;
 
+import com.timelink.time_link.dto.CourseDTO;
+import com.timelink.time_link.mapper.CourseMapper;
 import com.timelink.time_link.model.Course;
 import com.timelink.time_link.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final CourseMapper courseMapper;
 
-    public Course createCourse(Course course) {
-        // Провери дали курс с това име вече съществува
-        if (courseRepository.existsByName(course.getName())) {
-            throw new RuntimeException("Course with this name already exists: " + course.getName());
+    public CourseDTO createCourse(CourseDTO dto) {
+        if (courseRepository.existsByName(dto.getName())) {
+            throw new RuntimeException("Course with this name already exists: " + dto.getName());
         }
-        return courseRepository.save(course);
+        Course course = courseMapper.toEntity(dto);
+        Course saved = courseRepository.save(course);
+        return courseMapper.toDTO(saved);
     }
 
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    public List<CourseDTO> getAllCourses() {
+        List<Course> courses = courseRepository.findAll();
+        return courseMapper.toDTOList(courses);
     }
 
-    public Optional<Course> getCourseById(Integer id) {
-        return courseRepository.findById(id);
+    public CourseDTO getCourseById(Integer id) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found with id: " + id));
+        return courseMapper.toDTO(course);
     }
 
-    public Optional<Course> getCourseByName(String name) {
-        return courseRepository.findByName(name);
+    public CourseDTO getCourseByName(String name) {
+        Course course = courseRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Course not found with name: " + name));
+        return courseMapper.toDTO(course);
     }
 
-    public Course updateCourse(Integer id, Course courseDetails) {
+    public CourseDTO updateCourse(Integer id, CourseDTO dto) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found with id: " + id));
 
-        course.setName(courseDetails.getName());
-        course.setTeachers(courseDetails.getTeachers());
-        course.setLessons(courseDetails.getLessons());
-        course.setPrice(courseDetails.getPrice());
-        course.setAge(courseDetails.getAge());
-        course.setTimePeriod(courseDetails.getTimePeriod());
-
-        return courseRepository.save(course);
+        courseMapper.updateEntity(course, dto);
+        Course updated = courseRepository.save(course);
+        return courseMapper.toDTO(updated);
     }
 
     public void deleteCourse(Integer id) {
