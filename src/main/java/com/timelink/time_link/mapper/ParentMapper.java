@@ -1,38 +1,21 @@
 package com.timelink.time_link.mapper;
 
-import com.timelink.time_link.dto.ParentDTO;
+import com.timelink.time_link.dto.Parent.ParentRequestDTO;
+import com.timelink.time_link.dto.Parent.ParentResponseDTO;
 import com.timelink.time_link.model.Parent;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
+import java.util.List;
 
-public class ParentMapper {
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface ParentMapper {
 
-    public static ParentDTO toDTO(Parent parent) {
-        if (parent == null) return null;
+    ParentResponseDTO toParentResponseDTO(Parent parent);
 
-        ParentDTO dto = new ParentDTO();
-        dto.setId(parent.getId());
-        dto.setName(parent.getName());
-        dto.setPhone(parent.getPhone());
-        dto.setEmail(parent.getEmail());
-        dto.setChild(parent.getChild());
-        dto.setPaid(parent.isPaid());
-        dto.setUsername(parent.getUsername());
-        // НЯМА password — скриваме го от клиента
-        return dto;
-    }
+    List<ParentResponseDTO> toParentResponseDTOList(List<Parent> parents);
 
-    public static Parent toEntity(ParentDTO dto) {
-        if (dto == null) return null;
-
-        Parent parent = new Parent();
-        parent.setId(dto.getId());
-        parent.setName(dto.getName());
-        parent.setPhone(dto.getPhone());
-        parent.setEmail(dto.getEmail());
-        parent.setChild(dto.getChild());
-        parent.setPaid(dto.isPaid());
-        parent.setUsername(dto.getUsername());
-        // password не се подава от DTO
-        return parent;
-    }
+    @Mapping(target = "id", ignore = true)
+    Parent toParent(ParentRequestDTO parentRequestDTO);
 }

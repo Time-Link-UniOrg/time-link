@@ -1,6 +1,5 @@
 package com.timelink.time_link.controller;
 
-import com.timelink.time_link.dto.ParentDTO;
 import com.timelink.time_link.mapper.ParentMapper;
 import com.timelink.time_link.model.Parent;
 import com.timelink.time_link.service.ParentService;
