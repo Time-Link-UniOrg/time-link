@@ -1,7 +1,8 @@
 package com.timelink.time_link.controller;
 
-import com.timelink.time_link.model.Course;
+import com.timelink.time_link.dto.CourseDTO;
 import com.timelink.time_link.service.CourseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,52 +17,41 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    // POST - Създай нов курс
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        Course createdCourse = courseService.createCourse(course);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
+    public ResponseEntity<CourseDTO> createCourse(@Valid @RequestBody CourseDTO dto) {
+        CourseDTO created = courseService.createCourse(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping
-    public ResponseEntity<List<Course>> getAllCourses() {
-        List<Course> courses = courseService.getAllCourses();
+    public ResponseEntity<List<CourseDTO>> getAllCourses() {
+        List<CourseDTO> courses = courseService.getAllCourses();
         return ResponseEntity.ok(courses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable Integer id) {
-        return courseService.getCourseById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CourseDTO> getCourseById(@PathVariable Integer id) {
+        CourseDTO course = courseService.getCourseById(id);
+        return ResponseEntity.ok(course);
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<Course> getCourseByName(@PathVariable String name) {
-        return courseService.getCourseByName(name)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CourseDTO> getCourseByName(@PathVariable String name) {
+        CourseDTO course = courseService.getCourseByName(name);
+        return ResponseEntity.ok(course);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(
+    public ResponseEntity<CourseDTO> updateCourse(
             @PathVariable Integer id,
-            @RequestBody Course course) {
-        try {
-            Course updatedCourse = courseService.updateCourse(id, course);
-            return ResponseEntity.ok(updatedCourse);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+            @Valid @RequestBody CourseDTO dto) {
+        CourseDTO updated = courseService.updateCourse(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCourse(@PathVariable Integer id) {
-        try {
-            courseService.deleteCourse(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        courseService.deleteCourse(id);
+        return ResponseEntity.noContent().build();
     }
 }
