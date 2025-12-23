@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "teacher")
-@Data
+@Data 
 @NoArgsConstructor
 @AllArgsConstructor
 public class Teacher {
@@ -20,7 +20,6 @@ public class Teacher {
     private String name;
 
     private String phone;
-
     private String email;
 
     @Column(columnDefinition = "text")

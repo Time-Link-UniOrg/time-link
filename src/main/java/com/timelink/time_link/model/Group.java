@@ -36,16 +36,6 @@ public class Group {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    /*
-    @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
-
-    @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
-    */
-
     @OneToMany(mappedBy = "group")
     @JsonManagedReference
     private List<Student> students = new ArrayList<>();

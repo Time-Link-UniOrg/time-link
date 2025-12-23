@@ -1,57 +1,56 @@
 package com.timelink.time_link.controller;
 
-import com.timelink.time_link.dto.CourseDTO;
+import com.timelink.time_link.dto.Course.CourseRequestDTO;
+import com.timelink.time_link.dto.Course.CourseResponseDTO;
+import com.timelink.time_link.mapper.CourseMapper;
+import com.timelink.time_link.model.Course;
 import com.timelink.time_link.service.CourseService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/courses")
 @RequiredArgsConstructor
+@RequestMapping("/courses")
+@Validated
 public class CourseController {
 
     private final CourseService courseService;
+    private final CourseMapper courseMapper;
 
-    @PostMapping
-    public ResponseEntity<CourseDTO> createCourse(@Valid @RequestBody CourseDTO dto) {
-        CourseDTO created = courseService.createCourse(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<CourseDTO>> getAllCourses() {
-        List<CourseDTO> courses = courseService.getAllCourses();
-        return ResponseEntity.ok(courses);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CourseDTO> getCourseById(@PathVariable Integer id) {
-        CourseDTO course = courseService.getCourseById(id);
-        return ResponseEntity.ok(course);
-    }
-
-    @GetMapping("/name/{name}")
-    public ResponseEntity<CourseDTO> getCourseByName(@PathVariable String name) {
-        CourseDTO course = courseService.getCourseByName(name);
-        return ResponseEntity.ok(course);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<CourseDTO> updateCourse(
-            @PathVariable Integer id,
-            @Valid @RequestBody CourseDTO dto) {
-        CourseDTO updated = courseService.updateCourse(id, dto);
-        return ResponseEntity.ok(updated);
+    @PostMapping()
+    public ResponseEntity<CourseResponseDTO> saveCourse(@Valid @RequestBody CourseRequestDTO courseRequestDTO) {
+        Course savedCourse = courseService.saveCourse(courseRequestDTO);
+        return new ResponseEntity<>(courseMapper.toCourseResponseDTO(savedCourse), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteCourse(@PathVariable @Positive Integer id) {
         courseService.deleteCourse(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CourseResponseDTO> getCourseById(@PathVariable @Positive Integer id) {
+        Course fetchedCourse = courseService.getCourseOrThrow(id);
+        return ResponseEntity.ok(courseMapper.toCourseResponseDTO(fetchedCourse));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<CourseResponseDTO>> getAllCourses() {
+        return new ResponseEntity<>(courseMapper.toCourseResponseDTOList(courseService.getAllCourses()), HttpStatus.OK);
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<CourseResponseDTO> getCourseByName(@PathVariable String name) {
+        Course fetchedCourse = courseService.getCourseByName(name)
+                .orElseThrow(() -> new com.timelink.time_link.exception.ResourceNotFoundException("Course with name " + name + " not found"));
+        return ResponseEntity.ok(courseMapper.toCourseResponseDTO(fetchedCourse));
     }
 }
