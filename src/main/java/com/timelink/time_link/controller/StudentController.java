@@ -1,56 +1,57 @@
 package com.timelink.time_link.controller;
 
 import com.timelink.time_link.dto.Student.StudentRequestDTO;
-import com.timelink.time_link.model.Group;
+import com.timelink.time_link.dto.Student.StudentResponseDTO;
+import com.timelink.time_link.mapper.StudentMapper;
 import com.timelink.time_link.model.Student;
-import com.timelink.time_link.repository.GroupRepository;
-import com.timelink.time_link.repository.StudentRepository;
 import com.timelink.time_link.service.StudentService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/api/students")
 @RequiredArgsConstructor
+@RequestMapping("/students")
+@Validated
 public class StudentController {
 
     private final StudentService studentService;
-    private final GroupRepository groupRepository;
+    private final StudentMapper studentMapper;
 
-    @GetMapping
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
-    }
-
-    @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable Long id) {
-        return studentService.getStudentById(id);
-    }
-
-    @PostMapping
-    public ResponseEntity<StudentResponseDTO> saveStudent(@RequestBody Student student) {
-        if (student.getGroup() != null && student.getGroup().getId() != null) {
-            Group group = groupRepository.findById(student.getGroup().getId())
-                    .orElseThrow(() -> new NoSuchElementException("Group not found"));
-            student.setGroup(group);
-        }
-        return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.OK);
+    @PostMapping()
+    public ResponseEntity<StudentResponseDTO> saveStudent(@Valid @RequestBody StudentRequestDTO studentRequestDTO) {
+        Student savedStudent = studentService.saveStudent(studentRequestDTO);
+        return new ResponseEntity<>(studentMapper.toStudentResponseDTO(savedStudent), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
-        student.setId(id);
-        return studentService.saveStudent(student);
+    public ResponseEntity<StudentResponseDTO> updateStudent(
+            @PathVariable @Positive Long id,
+            @Valid @RequestBody StudentRequestDTO studentRequestDTO) {
+        Student updatedStudent = studentService.updateStudent(id, studentRequestDTO);
+        return ResponseEntity.ok(studentMapper.toStudentResponseDTO(updatedStudent));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable @Positive Long id) {
         studentService.deleteStudent(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentResponseDTO> getStudentById(@PathVariable @Positive Long id) {
+        Student fetchedStudent = studentService.getStudentOrThrow(id);
+        return ResponseEntity.ok(studentMapper.toStudentResponseDTO(fetchedStudent));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<StudentResponseDTO>> getAllStudents() {
+        return new ResponseEntity<>(studentMapper.toStudentResponseDTOList(studentService.getAllStudents()), HttpStatus.OK);
     }
 }
-
