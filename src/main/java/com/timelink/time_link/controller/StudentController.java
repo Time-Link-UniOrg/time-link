@@ -1,6 +1,8 @@
 package com.timelink.time_link.controller;
 
 import com.timelink.time_link.dto.Student.StudentRequestDTO;
+import com.timelink.time_link.dto.Student.StudentResponseDTO;
+import com.timelink.time_link.mapper.StudentMapper;
 import com.timelink.time_link.model.Group;
 import com.timelink.time_link.model.Student;
 import com.timelink.time_link.repository.GroupRepository;
@@ -21,6 +23,7 @@ public class StudentController {
 
     private final StudentService studentService;
     private final GroupRepository groupRepository;
+    private final StudentMapper studentMapper;
 
     @GetMapping
     public List<Student> getAllStudents() {
@@ -39,7 +42,8 @@ public class StudentController {
                     .orElseThrow(() -> new NoSuchElementException("Group not found"));
             student.setGroup(group);
         }
-        return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.OK);
+        Student savedStudent = studentService.saveStudent(student);
+        return new ResponseEntity<>(studentMapper.toStudentResponseDTO(savedStudent), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

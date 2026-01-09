@@ -1,4 +1,7 @@
 package com.timelink.time_link.service;
+import com.timelink.time_link.dto.Parent.ParentRequestDTO;
+import com.timelink.time_link.exception.ResourceNotFoundException;
+import com.timelink.time_link.mapper.ParentMapper;
 
 import com.timelink.time_link.model.Parent;
 import com.timelink.time_link.repository.ParentRepository;
@@ -14,6 +17,7 @@ import java.util.Optional;
 public class ParentService {
 
     private final ParentRepository parentRepository;
+    private final ParentMapper parentMapper;
 
     public List<Parent> getAllParents() {
         return parentRepository.findAll();
@@ -21,6 +25,10 @@ public class ParentService {
 
     public Parent createParent(Parent parent) {
         parent.setId(null);
+        return parentRepository.save(parent);
+    }
+    public Parent saveParent(ParentRequestDTO parentRequestDTO) {
+        Parent parent = parentMapper.toParent(parentRequestDTO);
         return parentRepository.save(parent);
     }
 
@@ -48,6 +56,22 @@ public class ParentService {
 
         return parentRepository.save(existing);
     }
+    public Parent updateParent(Integer id, ParentRequestDTO parentRequestDTO) {
+        Parent parent = getParentOrThrow(id);
+
+        parent.setName(parentRequestDTO.name());
+        parent.setPhone(parentRequestDTO.phone());
+        parent.setEmail(parentRequestDTO.email());
+        parent.setChild(parentRequestDTO.child());
+        parent.setPaid(parentRequestDTO.paid());
+        parent.setUsername(parentRequestDTO.username());
+
+        if (parentRequestDTO.password() != null && !parentRequestDTO.password().isEmpty()) {
+            parent.setPassword(parentRequestDTO.password());
+        }
+
+        return parentRepository.save(parent);
+    }
 
     @Transactional
     public void deleteParent(Integer id) {
@@ -61,6 +85,10 @@ public class ParentService {
         if (parentRepository.count() == 0) {
             parentRepository.restartParentIdIdentity();
         }
+    }
+    public Parent getParentOrThrow(Integer id) {
+        return parentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Parent.class, id));
     }
 
 }
