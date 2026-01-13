@@ -27,7 +27,7 @@ public class GroupService {
     }
 
     @Transactional
-    public void deleteGroup(Long id) {
+    public void deleteGroup(Integer id) {
         if (groupRepository.existsById(id)) {
             groupRepository.deleteById(id);
         } else {
@@ -35,7 +35,7 @@ public class GroupService {
         }
     }
 
-    public Optional<Group> getGroupById(Long id) {
+    public Optional<Group> getGroupById(Integer id) {
         return groupRepository.findById(id);
     }
 
@@ -43,7 +43,7 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
-    public Group getGroupOrThrow(Long id) {
+    public Group getGroupOrThrow(Integer id) {
         return groupRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Group.class, id));
     }

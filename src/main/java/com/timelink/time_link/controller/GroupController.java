@@ -31,13 +31,13 @@ public class GroupController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGroup(@PathVariable @Positive Long id) {
+    public ResponseEntity<Void> deleteGroup(@PathVariable @Positive Integer id) {
         groupService.deleteGroup(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GroupResponseDTO> getGroupById(@PathVariable @Positive Long id) {
+    public ResponseEntity<GroupResponseDTO> getGroupById(@PathVariable @Positive Integer id) {
         Group fetchedGroup = groupService.getGroupOrThrow(id);
         return ResponseEntity.ok(groupMapper.toGroupResponseDTO(fetchedGroup));
     }

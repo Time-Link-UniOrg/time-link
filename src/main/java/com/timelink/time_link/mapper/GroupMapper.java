@@ -21,7 +21,7 @@ public interface GroupMapper {
     @Mapping(target = "students", ignore = true)
     Group toGroup(GroupRequestDTO groupRequestDTO);
 
-    default List<Long> mapStudentsToIds(Group group) {
+    default List<Integer> mapStudentsToIds(Group group) {
         if (group.getStudents() == null) {
             return null;
         }
