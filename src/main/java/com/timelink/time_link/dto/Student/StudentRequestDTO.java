@@ -20,7 +20,7 @@ public record StudentRequestDTO(
         @Size(min = 6, message = "Password must be at least 6 characters")
         String password,
 
-        Long groupId
+        Integer groupId
 ) {
     public StudentRequestDTO {
         if (name != null) name = name.trim();
