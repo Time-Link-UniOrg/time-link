@@ -45,4 +45,18 @@ public class Teacher {
     )
     private Set<Course> qualifiedCourses = new HashSet<>();
 
+    public void addQualifiedCourse(Course course) {
+        this.qualifiedCourses.add(course);
+        course.getQualifiedTeachers().add(this);
+    }
+
+    public void removeQualifiedCourse(Course course) {
+        this.qualifiedCourses.remove(course);
+        course.getQualifiedTeachers().remove(this);
+    }
+
+    public boolean isQualifiedFor(Course course) {
+        return this.qualifiedCourses.contains(course);
+    }
+
 }

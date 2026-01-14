@@ -36,4 +36,8 @@ public class Course {
 
     @ManyToMany(mappedBy = "qualifiedCourses", fetch = FetchType.LAZY)
     private Set<Teacher> qualifiedTeachers = new HashSet<>();
+
+    public int getQualifiedTeacherCount() {
+        return this.qualifiedTeachers.size();
+    }
 }

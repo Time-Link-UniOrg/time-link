@@ -22,7 +22,7 @@ public class Student {
     @SequenceGenerator(name = "student_sequence", allocationSize = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -51,4 +51,13 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "parent_id")
     )
     private Set<Parent> parents = new HashSet<>();
+
+    public Student(Integer id, String name, Boolean active, LocalDate dateBirth, String username, String password, Group group) {
+        this.id = id; this.name = name;
+        this.active = active;
+        this.dateBirth = dateBirth;
+        this.username = username;
+        this.password = password;
+        this.group = group;
+    }
 }

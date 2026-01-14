@@ -23,13 +23,13 @@ public class StudentSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Optional<Group> groupOpt = groupRepository.findById(1L);
+        Optional<Group> groupOpt = groupRepository.findById(1);
         if(groupOpt.isPresent())
         {
             Group group = groupOpt.get();
 
-            Student student1 = new Student(null, "Mila", true, LocalDate.of(2005, 10, 29),
-                    "mila", "1234", group);
+            Student student1 = new Student(null, "Maria", true, LocalDate.of(2005, 10, 29),
+                    "maria", "1234", group);
 
             Student student2 = new Student(null, "Ivan", true, LocalDate.of(2004, 12, 28),
                     "ivan1", "1234i", group);
@@ -37,7 +37,7 @@ public class StudentSeeder implements CommandLineRunner {
             studentRepository.save(student1);
             studentRepository.save(student2);
 
-            System.out.println("Seeded students: Mila, Ivan");
+            System.out.println("Seeded students: Maria, Ivan");
         } else {
             System.out.println("Group not found");
         }
