@@ -3,10 +3,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record GroupResponseDTO(
-        Long id,
+        Integer id,
         String name,
         Boolean active,
         LocalDateTime startTime,
         LocalDateTime endTime,
-        List<Long> studentIds
+        List<Integer> studentIds
 ) {}

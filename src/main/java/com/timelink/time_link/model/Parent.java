@@ -16,7 +16,7 @@ public class Parent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(example = "1", accessMode = Schema.AccessMode.READ_ONLY) // ← само за четене в Swagger
+    @Schema(example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
 

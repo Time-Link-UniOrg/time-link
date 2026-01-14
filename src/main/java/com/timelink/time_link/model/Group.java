@@ -19,10 +19,9 @@ import java.util.List;
 public class Group {
 
     @Id
-    @SequenceGenerator(name = "group_sequence", allocationSize = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
