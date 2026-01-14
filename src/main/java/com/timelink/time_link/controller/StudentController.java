@@ -31,7 +31,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable Long id) {
+    public Student getStudentById(@PathVariable Integer id) {
         return studentService.getStudentById(id);
     }
 
@@ -47,13 +47,13 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
+    public Student updateStudent(@PathVariable Integer id, @RequestBody Student student) {
         student.setId(id);
         return studentService.saveStudent(student);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteStudent(@PathVariable Long id) {
+    public void deleteStudent(@PathVariable Integer id) {
         studentService.deleteStudent(id);
     }
 }
