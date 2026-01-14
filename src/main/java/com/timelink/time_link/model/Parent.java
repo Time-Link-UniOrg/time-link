@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "parent")
 @Data
@@ -25,8 +28,8 @@ public class Parent {
     private String phone;
     private String email;
 
-    @Column(columnDefinition = "text")
-    private String child;
+    @ManyToMany(mappedBy = "parents", fetch = FetchType.LAZY)
+    private Set<Student> children = new HashSet<>();
     private boolean paid;
 
     @Column(unique = true, nullable = false)

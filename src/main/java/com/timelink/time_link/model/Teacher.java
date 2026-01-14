@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "teacher")
 @Data 
@@ -28,12 +31,18 @@ public class Teacher {
     @Column(columnDefinition = "text")
     private String groups;
 
-    @Column(columnDefinition = "text")
-    private String coursesId;
-
     @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
     private String password;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "teacher_course_qualification",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Set<Course> qualifiedCourses = new HashSet<>();
+
 }

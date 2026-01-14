@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "course")
 @Data
@@ -21,9 +24,6 @@ public class Course {
     private String name;
 
     @Column(columnDefinition = "text")
-    private String teachers;
-
-    @Column(columnDefinition = "text")
     private String lessons;
 
     @Column(precision = 10, scale = 2)
@@ -33,4 +33,7 @@ public class Course {
 
     @Column(name = "time_period")
     private Integer timePeriod;
+
+    @ManyToMany(mappedBy = "qualifiedCourses", fetch = FetchType.LAZY)
+    private Set<Teacher> qualifiedTeachers = new HashSet<>();
 }
