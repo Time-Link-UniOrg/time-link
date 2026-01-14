@@ -21,7 +21,7 @@ public interface StudentMapper {
     @Mapping(target = "group", ignore = true)
     Student toStudent(StudentRequestDTO studentRequestDTO);
 
-    default Long mapGroupToId(Student student) {
+    default Integer mapGroupToId(Student student) {
         if (student.getGroup() == null) {
             return null;
         }

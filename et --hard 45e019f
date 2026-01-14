@@ -1,0 +1,40 @@
+[33mffb6bee[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mAS-18[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{0}: reset: moving to origin/master
+[33m45e019f[m[33m ([m[1;31morigin/AS-18[m[33m)[m HEAD@{1}: checkout: moving from AS-18 to AS-18
+[33m45e019f[m[33m ([m[1;31morigin/AS-18[m[33m)[m HEAD@{2}: commit: Add Lesson flow: controller, DTOs, mapper, service, test
+[33m206417d[m HEAD@{3}: commit: Added ManyToMany relationships (Student–Parent, Teacher–Course)
+[33m0f64a90[m[33m ([m[1;32mime-na-brancha[m[33m)[m HEAD@{4}: checkout: moving from ime-na-brancha to AS-18
+[33m0f64a90[m[33m ([m[1;32mime-na-brancha[m[33m)[m HEAD@{5}: checkout: moving from master to ime-na-brancha
+[33m0f64a90[m[33m ([m[1;32mime-na-brancha[m[33m)[m HEAD@{6}: commit: Fixed missing DTO imports, aligned controller–service methods, and added StudentMapper for proper entity - DTO mapping
+[33m7081e07[m HEAD@{7}: checkout: moving from AS-17 to master
+[33m4dbb804[m[33m ([m[1;31morigin/AS-17[m[33m, [m[1;32mAS-17[m[33m)[m HEAD@{8}: commit: fix Student components
+[33ma81ad9e[m HEAD@{9}: commit: AS-17: Refactor to MapStruct, Records DTOs, centralized exception handling, validation, standardized endpoints, and service/controller cleanup
+[33m2d75c81[m HEAD@{10}: checkout: moving from master to AS-17
+[33m2d75c81[m HEAD@{11}: checkout: moving from master to master
+[33m2d75c81[m HEAD@{12}: reset: moving to origin/master
+[33m314c2bb[m HEAD@{13}: checkout: moving from AS-16 to master
+[33mb0b9d3a[m[33m ([m[1;31morigin/AS-16[m[33m, [m[1;32mAS-16[m[33m)[m HEAD@{14}: commit: update branch
+[33mcdf6eef[m HEAD@{15}: checkout: moving from master to AS-16
+[33mcdf6eef[m HEAD@{16}: commit (merge): Merge branch 'master' of https://github.com/Time-Link-UniOrg/time-link
+[33m0f55657[m HEAD@{17}: checkout: moving from AS-10 to master
+[33mba112cc[m[33m ([m[1;31morigin/AS-10[m[33m, [m[1;32mAS-10[m[33m)[m HEAD@{18}: checkout: moving from AS-10 to AS-10
+[33mba112cc[m[33m ([m[1;31morigin/AS-10[m[33m, [m[1;32mAS-10[m[33m)[m HEAD@{19}: branch: Reset to origin/AS-10
+[33mba112cc[m[33m ([m[1;31morigin/AS-10[m[33m, [m[1;32mAS-10[m[33m)[m HEAD@{20}: pull --ff --recurse-submodules --progress origin: Fast-forward
+[33m69935ca[m HEAD@{21}: commit: update from master
+[33m40ae8cc[m HEAD@{22}: checkout: moving from master to AS-10
+[33m0f55657[m HEAD@{23}: commit: update from master
+[33m66ac8b3[m HEAD@{24}: commit: update from master
+[33m22c4aee[m HEAD@{25}: checkout: moving from AS-10 to master
+[33m40ae8cc[m HEAD@{26}: checkout: moving from master to AS-10
+[33m22c4aee[m HEAD@{27}: checkout: moving from AS-10 to master
+[33m40ae8cc[m HEAD@{28}: checkout: moving from AS-13 to AS-10
+[33mb7a8bc9[m[33m ([m[1;31morigin/AS-13[m[33m, [m[1;32mAS-13[m[33m)[m HEAD@{29}: commit: AS-13: Implement Course Table with CRUD operations
+[33m05ba13e[m HEAD@{30}: checkout: moving from master to AS-13
+[33m22c4aee[m HEAD@{31}: commit: Remove AS-10 Teacher files from master
+[33m05ba13e[m HEAD@{32}: checkout: moving from master to master
+[33m05ba13e[m HEAD@{33}: checkout: moving from AS-13 to master
+[33m05ba13e[m HEAD@{34}: checkout: moving from master to AS-13
+[33m05ba13e[m HEAD@{35}: pull origin master: Fast-forward
+[33m6d8e979[m HEAD@{36}: checkout: moving from AS-10 to master
+[33m40ae8cc[m HEAD@{37}: commit: AS-10: Implement Teacher Table with CRUD operations
+[33m6d8e979[m HEAD@{38}: checkout: moving from master to AS-10
+[33m6d8e979[m HEAD@{39}: clone: from https://github.com/Time-Link-UniOrg/time-link.git

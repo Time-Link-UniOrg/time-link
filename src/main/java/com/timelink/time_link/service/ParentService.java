@@ -1,8 +1,8 @@
 package com.timelink.time_link.service;
+
 import com.timelink.time_link.dto.Parent.ParentRequestDTO;
 import com.timelink.time_link.exception.ResourceNotFoundException;
 import com.timelink.time_link.mapper.ParentMapper;
-
 import com.timelink.time_link.model.Parent;
 import com.timelink.time_link.repository.ParentRepository;
 import jakarta.transaction.Transactional;
@@ -27,16 +27,15 @@ public class ParentService {
         parent.setId(null);
         return parentRepository.save(parent);
     }
+
     public Parent saveParent(ParentRequestDTO parentRequestDTO) {
         Parent parent = parentMapper.toParent(parentRequestDTO);
         return parentRepository.save(parent);
     }
 
-
     public Optional<Parent> getParentById(Integer id) {
         return parentRepository.findById(id);
     }
-
 
     public Optional<Parent> getByUsername(String username) {
         return Optional.ofNullable(parentRepository.findByUsername(username));
@@ -49,20 +48,19 @@ public class ParentService {
         existing.setName(updated.getName());
         existing.setPhone(updated.getPhone());
         existing.setEmail(updated.getEmail());
-        existing.setChild(updated.getChild());
         existing.setPaid(updated.isPaid());
         existing.setUsername(updated.getUsername());
         existing.setPassword(updated.getPassword());
 
         return parentRepository.save(existing);
     }
+
     public Parent updateParent(Integer id, ParentRequestDTO parentRequestDTO) {
         Parent parent = getParentOrThrow(id);
 
         parent.setName(parentRequestDTO.name());
         parent.setPhone(parentRequestDTO.phone());
         parent.setEmail(parentRequestDTO.email());
-        parent.setChild(parentRequestDTO.child());
         parent.setPaid(parentRequestDTO.paid());
         parent.setUsername(parentRequestDTO.username());
 
@@ -91,4 +89,15 @@ public class ParentService {
                 .orElseThrow(() -> new ResourceNotFoundException(Parent.class, id));
     }
 
+    public Parent addChildToParent(Integer parentId, com.timelink.time_link.model.Student student) {
+        Parent parent = getParentOrThrow(parentId);
+        parent.addChild(student);
+        return parentRepository.save(parent);
+    }
+
+    public Parent removeChildFromParent(Integer parentId, com.timelink.time_link.model.Student student) {
+        Parent parent = getParentOrThrow(parentId);
+        parent.removeChild(student);
+        return parentRepository.save(parent);
+    }
 }

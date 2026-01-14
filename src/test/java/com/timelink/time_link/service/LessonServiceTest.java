@@ -1,4 +1,4 @@
-package com.timelink.time_link;
+package com.timelink.time_link.service;
 
 import com.timelink.time_link.exception.ResourceNotFoundException;
 import com.timelink.time_link.exception.TimeConflictException;
