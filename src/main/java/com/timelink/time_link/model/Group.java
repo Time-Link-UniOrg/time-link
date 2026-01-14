@@ -22,7 +22,7 @@ public class Group {
     @SequenceGenerator(name = "group_sequence", allocationSize = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_sequence")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
