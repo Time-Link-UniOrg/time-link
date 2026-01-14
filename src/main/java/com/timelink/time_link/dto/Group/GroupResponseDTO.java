@@ -8,5 +8,5 @@ public record GroupResponseDTO(
         Boolean active,
         LocalDateTime startTime,
         LocalDateTime endTime,
-        List<Long> studentIds
+        List<Integer> studentIds
 ) {}
