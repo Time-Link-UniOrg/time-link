@@ -19,8 +19,7 @@ import java.util.Set;
 public class Student {
 
     @Id
-    @SequenceGenerator(name = "student_sequence", allocationSize = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
 

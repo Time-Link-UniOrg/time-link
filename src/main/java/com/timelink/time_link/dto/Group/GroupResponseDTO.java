@@ -3,7 +3,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record GroupResponseDTO(
-        Long id,
+        Integer id,
         String name,
         Boolean active,
         LocalDateTime startTime,
