@@ -26,24 +26,28 @@ public class StudentController {
     private final StudentMapper studentMapper;
 
     @GetMapping
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+    public List<StudentResponseDTO> getAllStudents() {
+        return studentMapper.toStudentResponseDTOList(studentService.getAllStudents());
     }
 
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable Integer id) {
-        return studentService.getStudentById(id);
+    public StudentResponseDTO getStudentById(@PathVariable Integer id) {
+        return studentMapper.toStudentResponseDTO(studentService.getStudentById(id));
     }
 
     @PostMapping
-    public ResponseEntity<StudentResponseDTO> saveStudent(@RequestBody Student student) {
-        if (student.getGroup() != null && student.getGroup().getId() != null) {
-            Group group = groupRepository.findById(student.getGroup().getId())
+    public ResponseEntity<StudentResponseDTO> saveStudent(@RequestBody StudentRequestDTO dto) {
+        Student student = studentMapper.toStudent(dto);
+
+        if (dto.groupId() != null) {
+            Group group = groupRepository.findById(dto.groupId())
                     .orElseThrow(() -> new NoSuchElementException("Group not found"));
             student.setGroup(group);
         }
+
         Student savedStudent = studentService.saveStudent(student);
-        return new ResponseEntity<>(studentMapper.toStudentResponseDTO(savedStudent), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(studentMapper.toStudentResponseDTO(savedStudent));
     }
 
     @PutMapping("/{id}")

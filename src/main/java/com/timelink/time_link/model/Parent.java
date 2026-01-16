@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,6 +40,7 @@ public class Parent {
     private String password;
 
     @ManyToMany(mappedBy = "parents", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Student> children = new HashSet<>();
 
     public void addChild(Student student) {
