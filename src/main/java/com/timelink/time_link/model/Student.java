@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -40,4 +42,21 @@ public class Student {
     @JoinColumn(name = "group_id")
     @JsonBackReference
     private Group group;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "student_parent",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "parent_id")
+    )
+    private Set<Parent> parents = new HashSet<>();
+
+    public Student(Integer id, String name, Boolean active, LocalDate dateBirth, String username, String password, Group group) {
+        this.id = id; this.name = name;
+        this.active = active;
+        this.dateBirth = dateBirth;
+        this.username = username;
+        this.password = password;
+        this.group = group;
+    }
 }
