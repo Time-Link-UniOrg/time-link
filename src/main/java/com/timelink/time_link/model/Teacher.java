@@ -1,6 +1,5 @@
 package com.timelink.time_link.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +17,6 @@ public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
 
     @Column(nullable = false)
@@ -33,20 +31,32 @@ public class Teacher {
     @Column(columnDefinition = "text")
     private String groups;
 
-    @Column(columnDefinition = "text")
-    private String coursesId;
-
-    @ManyToMany
-    @JoinTable(
-            name = "teacher_qualified_courses",
-            joinColumns = @JoinColumn(name = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
-    private Set<Course> qualifiedCourses = new HashSet<>();
-
     @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
     private String password;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "teacher_course_qualification",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Set<Course> qualifiedCourses = new HashSet<>();
+
+    public void addQualifiedCourse(Course course) {
+        this.qualifiedCourses.add(course);
+        course.getQualifiedTeachers().add(this);
+    }
+
+    public void removeQualifiedCourse(Course course) {
+        this.qualifiedCourses.remove(course);
+        course.getQualifiedTeachers().remove(this);
+    }
+
+    public boolean isQualifiedFor(Course course) {
+        return this.qualifiedCourses.contains(course);
+    }
+
 }
