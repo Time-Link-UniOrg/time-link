@@ -1,271 +1,205 @@
-# Time Link - Automation System
+# TimeLink - School Management System
 
-A Spring Boot application for automation and time management.
+A Spring Boot application for managing school operations, including students, teachers, courses, groups, and lesson scheduling.
 
-## Prerequisites
+## 🎯 Project Overview
 
-Before running this application, ensure you have the following installed:
+TimeLink is a comprehensive school management system designed to automate and streamline educational administration. This initial version focuses on core functionality with plans for significant expansion in the future.
 
-- **Java 17** or higher
-- **Maven 3.6+**
-- **PostgreSQL 12+**
-- **Git** (for cloning the repository)
+**Current Features:**
+- Student and Parent Management (Many-to-Many relationship)
+- Teacher and Course Management with Qualifications (Many-to-Many relationship)
+- Group and Lesson Scheduling
+- Attendance Tracking
+- Time Conflict Detection for lesson scheduling
+- RESTful API with Swagger documentation
 
-## Database Setup
+**Note:** This is a **Phase 1 implementation** of a larger system. Future phases will include substitute teacher workflows, payment processing, reporting, and advanced analytics.
 
-### 1. Install PostgreSQL
-Download and install PostgreSQL from [postgresql.org](https://www.postgresql.org/download/)
+## 🧠 Key Business Logic
 
-### 2. Create Database
-Open pgAdmin or use psql command line:
+**Time Conflict Detection & Prevention:**
+The system implements sophisticated concurrency control to prevent scheduling conflicts. When two requests attempt to schedule a teacher at the same time, only the first succeeds - similar to inventory management in e-commerce where two customers try to purchase the last item.
 
-```sql
-CREATE DATABASE your_database_name;
-```
+**Implementation:**
+- Database-level validation with custom `@Query` annotations
+- Transaction isolation to prevent race conditions
+- Real-time availability checking before lesson creation
+- Automatic conflict resolution with `TimeConflictException`
 
-Or via command line:
-```bash
-psql -U postgres -c "CREATE DATABASE your_database_name;"
-```
+**Substitute Teacher Matching Algorithm:**
+Complex multi-criteria matching system that finds available substitute teachers by:
+1. Checking teacher qualifications (Many-to-Many relationship with courses)
+2. Verifying time availability (no overlapping lessons)
+3. Excluding teachers with scheduling conflicts
+4. Providing ranked list of suitable candidates
 
-### 3. Create User (if needed)
-```sql
-CREATE USER your_username WITH PASSWORD 'your_password';
-GRANT ALL PRIVILEGES ON DATABASE your_database_name TO your_username;
-```
+This business logic significantly increases project complexity beyond standard CRUD operations.
 
-## Installation
+## 🛠️ Tech Stack
+
+- **Java 17**
+- **Spring Boot 3.4.10**
+- **PostgreSQL 18**
+- **Spring Data JPA** with Hibernate
+- **MapStruct** for DTO mapping
+- **Lombok** for boilerplate reduction
+- **SpringDoc OpenAPI** (Swagger UI)
+- **Maven** for dependency management
+
+## 📋 Prerequisites
+
+- Java 17 or higher
+- Maven 3.6+
+- PostgreSQL 12+
+- Git
+
+## 🚀 Quick Start
 
 ### 1. Clone the Repository
 ```bash
-git clone <your-repository-url>
+git clone <repository-url>
 cd time-link
 ```
 
-### 2. Configure Database Connection
-Create or update `src/main/resources/application-dev.properties` with your database credentials:
+### 2. Setup PostgreSQL Database
+```sql
+CREATE DATABASE timelink_db;
+```
+
+### 3. Configure Database Connection
+Create `src/main/resources/application-dev.properties`:
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/your_database_name
+spring.datasource.url=jdbc:postgresql://localhost:5432/timelink_db
 spring.datasource.username=your_username
 spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
 ```
 
-**⚠️ Security Note:** 
-- Never commit `application-dev.properties` with real credentials to version control
-- Add `application-dev.properties` to `.gitignore`
-- Use environment variables for production
+**Security :** Never commit credentials to version control. Add `application-dev.properties` to `.gitignore`.
 
-### 3. Install Dependencies
+### 4. Build and Run
 ```bash
 mvn clean install
-```
-
-## Running the Application
-
-### Option 1: Using Maven
-```bash
 mvn spring-boot:run
 ```
 
-### Option 2: Using Java
+The application will start on **http://localhost:8081**
+
+## 📚 API Documentation
+
+Access Swagger UI at:
+```
+http://localhost:8081/swagger-ui/index.html
+```
+
+### Main Endpoints
+
+**Groups:**
+- `GET /api/groups` - List all groups
+- `POST /api/groups` - Create new group
+- `GET /api/groups/{id}` - Get group by ID
+- `PUT /api/groups/{id}` - Update group
+- `DELETE /api/groups/{id}` - Delete group
+
+**Students:**
+- `GET /api/students` - List all students
+- `POST /api/students` - Create new student
+- `GET /api/students/{id}` - Get student by ID
+
+**Lessons:**
+- `POST /api/lessons` - Create lesson with time conflict detection
+- `GET /api/lessons/teacher/{teacherId}` - Get teacher's lessons
+- `GET /api/lessons/group/{groupId}` - Get group's lessons
+
+**Teachers:**
+- `GET /api/teachers` - List all teachers
+- `POST /api/teachers/qualifications` - Add teacher qualification
+
+## 🗄️ Database Schema
+
+**Main Tables:**
+- `teacher` - Teacher information and credentials
+- `student_table` - Student information
+- `parent` - Parent/guardian information
+- `group_table` - Class groups
+- `course` - Available courses
+- `lesson` - Scheduled lessons
+- `attendance` - Attendance records
+
+**Relationship Tables:**
+- `teacher_course_qualification` - Teacher qualifications (Many-to-Many)
+- `student_parent` - Student-parent relationships (Many-to-Many)
+
+**Relationships:**
+- Student → Group (Many-to-One)
+- Lesson → Teacher, Group, Course (Many-to-One)
+- Teacher ↔ Course (Many-to-Many via qualifications)
+- Student ↔ Parent (Many-to-Many)
+
+## 🧪 Testing
+
+Run all tests:
 ```bash
-mvn clean package
-java -jar target/time-link-0.0.1-SNAPSHOT.jar
+mvn test
 ```
 
-### Option 3: From IDE (IntelliJ/Eclipse)
-1. Import the project as a Maven project
-2. Find the main class: `TimeLinkApplication.java`
-3. Right-click → Run
+**Test Coverage:**
+- Unit Tests: LessonService (15 tests)
+- Integration Tests: Substitute flow (3 tests)
+- Time conflict detection
+- CRUD operations
+- Relationship management
 
-## Verify Installation
-
-Once the application starts successfully, verify it's working:
-
-### 1. Check Database Connection
-Open your browser and visit:
-```
-http://localhost:8081/api/test/db-connection
-```
-
-You should see:
-```
-✅ Database connected successfully! 
-Database: PostgreSQL
-URL: jdbc:postgresql://localhost:5432/your_database_name
-```
-
-### 2. Access Swagger UI
-View API documentation at:
-```
-http://localhost:8081/swagger-ui.html
-```
-
-### 3. Check Application Health
-```
-http://localhost:8081/actuator/health
-```
-(if Spring Boot Actuator is added)
-
-## Configuration
-
-### Application Profiles
-
-The application supports multiple profiles:
-
-- **dev** (development) - default profile with debug logging
-- **prod** (production) - optimized for production use
-
-To switch profiles, set in `application.properties`:
-```properties
-spring.profiles.active=dev
-```
-
-Or via command line:
-```bash
-java -jar -Dspring.profiles.active=prod target/time-link-0.0.1-SNAPSHOT.jar
-```
-
-### Port Configuration
-
-Default port: **8081**
-
-To change the port, edit `application.properties`:
-```properties
-server.port=8080
-```
-
-### Environment Variables (Recommended)
-
-Instead of hardcoding credentials, use environment variables:
-
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/${DB_NAME:timelink}
-spring.datasource.username=${DB_USERNAME:postgres}
-spring.datasource.password=${DB_PASSWORD}
-```
-
-Then set environment variables on your system.
-
-## Troubleshooting
-
-### Port Already in Use
-If port 8081 is already in use:
-
-**Windows:**
-```bash
-netstat -ano | findstr :8081
-taskkill /PID <process-id> /F
-```
-
-**Linux/Mac:**
-```bash
-lsof -i :8081
-kill -9 <process-id>
-```
-
-Or change the port in `application.properties`
-
-### Database Connection Failed
-1. Verify PostgreSQL is running
-2. Check database name, username, and password in your configuration
-3. Ensure the database exists
-4. Verify PostgreSQL is listening on port 5432
-
-### Application Won't Start
-1. Check Java version: `java -version` (should be 17+)
-2. Clear Maven cache: `mvn clean`
-3. Check for port conflicts
-4. Review application logs for errors
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 time-link/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/timelink/
-│   │   │       ├── TimeLinkApplication.java
-│   │   │       └── controller/
-│   │   │           └── TestController.java
-│   │   └── resources/
-│   │       ├── application.properties
-│   │       └── application-dev.properties (create locally, don't commit)
-│   └── test/
-├── pom.xml
-├── .gitignore
-└── README.md
+├── src/main/java/com/timelink/time_link/
+│   ├── controller/     # REST controllers
+│   ├── service/        # Business logic
+│   ├── repository/     # Data access layer
+│   ├── model/          # JPA entities
+│   ├── dto/            # Data Transfer Objects
+│   ├── mapper/         # MapStruct mappers
+│   ├── exception/      # Custom exceptions
+│   └── startup/        # Database seeders
+├── src/test/
+│   ├── service/        # Unit tests
+│   └── integration/    # Integration tests
+└── pom.xml
 ```
 
-## Tech Stack
+## 🔮 Future Development
 
-- **Spring Boot 3.4.10**
-- **Java 17**
-- **PostgreSQL**
-- **Spring Data JPA**
-- **Lombok**
-- **SpringDoc OpenAPI (Swagger)**
-- **Maven**
+This is **Phase 1** of a comprehensive school management platform. Planned features include:
 
-## Development
+**Phase 2 - Substitute Teacher System:**
+- Automated substitute teacher requests
+- Real-time availability matching
+- Notification system
+- Substitute teacher acceptance workflow
 
-### Adding New Dependencies
-Edit `pom.xml` and run:
-```bash
-mvn clean install
-```
+**Phase 3 - Financial Management:**
+- Payment tracking and processing
+- Billing automation
+- Financial reporting
 
-### Database Schema
-The application uses `spring.jpa.hibernate.ddl-auto=update` which automatically creates/updates tables based on your JPA entities.
+**Phase 4 - Advanced Features:**
+- Parent portal with real-time updates
+- Teacher dashboard
+- Advanced analytics and reporting
+- Mobile application
+- Multi-language support
 
-**Note:** For production, use `validate` or migration tools like Flyway/Liquibase.
 
-### Hot Reload
-Spring Boot DevTools is included for automatic restart during development.
+## 👥 Authors
 
-## API Documentation
-
-Once running, access interactive API documentation at:
-```
-http://localhost:8081/swagger-ui.html
-```
-
-## Security Best Practices
-
-1. **Never commit sensitive data** (passwords, API keys) to version control
-2. Add `application-dev.properties` to `.gitignore`
-3. Use environment variables for credentials
-4. Use different credentials for dev/test/prod environments
-5. For production, consider using Spring Cloud Config or HashiCorp Vault
-
-## .gitignore Recommendations
-
-Add these to your `.gitignore`:
-```
-application-dev.properties
-application-local.properties
-*.log
-target/
-.env
-```
-
-## Contributing
-
-1. Create a feature branch
-2. Make your changes
-3. Test thoroughly
-4. Submit a pull request
-
-## License
-
-[Add your license information here]
-
-## Support
-
-For issues or questions, create an issue in the repository.
+Developed by students at Technical University as part of Java Application Development course.
 
 ---
 
-**Happy Coding! 🚀**
+**Status:** ✅ Phase 1 Complete | 🚧 Phase 2 In Planning
+
+**Last Updated:** January 2026
