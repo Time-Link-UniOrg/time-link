@@ -196,7 +196,7 @@ This is **Phase 1** of a comprehensive school management platform. Planned featu
 
 ## 👥 Authors
 
-Developed by students at Technical University as part of Java Application Development course.
+Developed by students at Technical University of Sofia.
 
 ---
 
